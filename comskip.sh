@@ -6,7 +6,7 @@ maxRetries=5
 echo "Comskip launched under user $(whoami) for file $filePath"
 
 while [ "$iteration" -lt "$maxRetries" ]; do
-    /usr/bin/env comskip --ini="/comskip.ini" "$filePath"
+    /usr/bin/env comskip --ini="/comskip/comskip.ini" "$filePath"
     comskipReturn=$?
     echo "Comskip returned: $comskipReturn"
     if [ "$comskipReturn" -eq "0" ]; then
