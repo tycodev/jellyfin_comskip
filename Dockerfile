@@ -1,6 +1,6 @@
 FROM ghcr.io/jellyfin/jellyfin:10.11.0@sha256:519b02989eafcc4bdb558bdc7014c2395c19608e5c2d7ed99a5f3edd0c75f7ef
 
-RUN apt update && apt -y upgrade && apt install -y comskip unzip && mkdir comskip
+# RUN apt update && apt -y upgrade && apt install -y comskip unzip && mkdir comskip
 
-COPY comskip.ini /comskip
-COPY comskip.sh /comskip
+# COPY comskip.ini /comskip
+# COPY comskip.sh /comskip
