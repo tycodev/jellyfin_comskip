@@ -20,6 +20,7 @@ RUN git clone https://github.com/erikkaashoek/Comskip.git \
     && make install
 
 FROM ghcr.io/jellyfin/jellyfin:10.11.7@sha256:2b93aa3830dcd0aab7185c635e20edef1f8dc5d2e999768baf1724e88c078004 AS final
+ENV PATH="/usr/lib/jellyfin-ffmpeg/:$PATH"
 RUN apt update && apt install -y \
     libswscale-dev \
     libargtable2-dev \
