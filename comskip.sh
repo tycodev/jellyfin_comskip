@@ -18,7 +18,7 @@ while [ "$iteration" -lt "$maxRetries" ]; do
         field_order=$(/usr/bin/env ffprobe -v error -select_streams v:0 -show_entries stream=field_order -of default=nokey=1:noprint_wrappers=1 "$filePath" 2>/dev/null)
         if [ -n "$field_order" ] && [ "$field_order" != "progressive" ]; then
             echo "Detected interlaced source (field_order=$field_order); enabling deinterlace filter."
-            deint_filter="yadif=0:-1:0"
+            deint_filter="deinterlace_qsv"
         else
             echo "Source is progressive or unknown field order ($field_order); no deinterlace filter."
             deint_filter=""
@@ -27,14 +27,18 @@ while [ "$iteration" -lt "$maxRetries" ]; do
         echo "Re-encoding '$filePath' to '$outputFile' with QSV h264 encoder"
         if [ -n "$deint_filter" ]; then
             /usr/bin/env ffmpeg -hide_banner -loglevel info -y \
-                -hwaccel qsv -i "$filePath" \
+                -hwaccel qsv -hwaccel_output_format qsv \
+                -err_detect ignore_err -fflags +discardcorrupt \
+                -i "$filePath" \
                 -vf "$deint_filter" \
-                -c:v h264_qsv -preset fast -global_quality 23 -pix_fmt yuv420p \
+                -c:v h264_qsv -preset fast -global_quality 23 \
                 -c:a copy -c:s copy \
                 "$outputFile"
         else
             /usr/bin/env ffmpeg -hide_banner -loglevel info -y \
-                -hwaccel qsv -i "$filePath" \
+                -hwaccel qsv -hwaccel_output_format qsv \
+                -err_detect ignore_err -fflags +discardcorrupt \
+                -i "$filePath" \
                 -c:v h264_qsv -preset fast -global_quality 23 -pix_fmt yuv420p \
                 -c:a copy -c:s copy \
                 "$outputFile"
