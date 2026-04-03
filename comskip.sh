@@ -54,6 +54,8 @@ while [ "$iteration" -lt "$maxRetries" ]; do
         fi
 
         echo "Re-encoding succeeded, removing original file '$filePath'"
+        # Clean up associated files
+        rm -f "${filePath%.*}.txt" "${filePath%.*}.log"
         rm -f "$filePath"
         mv "$tmpOutputFile" "$outputFile"
         exit 0
