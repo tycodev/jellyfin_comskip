@@ -47,7 +47,17 @@ run_ffmpeg() {
     deint_filter=$1
     output_file=$2
 
+    echo "Running ffmpeg command:"
     if [ -n "$deint_filter" ]; then
+        echo "/usr/bin/env ffmpeg -hide_banner -loglevel info -y \\"
+        echo "    $hwaccel_flags \\"
+        echo "    -err_detect ignore_err -fflags +discardcorrupt \\"
+        echo "    -i '$filePath' \\"
+        echo "    -vf '$deint_filter' \\"
+        echo "    -c:v $encoder -preset fast $quality_param \\"
+        echo "    -c:a copy -c:s copy \\"
+        echo "    -f matroska '$output_file'"
+        
         /usr/bin/env ffmpeg -hide_banner -loglevel info -y \
             "$hwaccel_flags" \
             -err_detect ignore_err -fflags +discardcorrupt \
@@ -57,6 +67,14 @@ run_ffmpeg() {
             -c:a copy -c:s copy \
             -f matroska "$output_file"
     else
+        echo "/usr/bin/env ffmpeg -hide_banner -loglevel info -y \\"
+        echo "    $hwaccel_flags \\"
+        echo "    -err_detect ignore_err -fflags +discardcorrupt \\"
+        echo "    -i '$filePath' \\"
+        echo "    -c:v $encoder -preset fast $quality_param -pix_fmt yuv420p \\"
+        echo "    -c:a copy -c:s copy \\"
+        echo "    -f matroska '$output_file'"
+        
         /usr/bin/env ffmpeg -hide_banner -loglevel info -y \
             "$hwaccel_flags" \
             -err_detect ignore_err -fflags +discardcorrupt \
