@@ -25,7 +25,9 @@ RUN apt update && apt install -y \
     libswscale-dev \
     libargtable2-dev \
     libavformat-dev \
-    libsdl1.2-dev
+    libsdl1.2-dev \
+    vim
+
 COPY --from=build /usr/local/bin/comskip /usr/local/bin/comskip
 RUN mkdir /comskip
 COPY comskip.ini /comskip
