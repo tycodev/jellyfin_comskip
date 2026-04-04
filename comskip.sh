@@ -35,10 +35,10 @@ get_deinterlace_filter() {
     field_order=$(/usr/bin/env ffprobe -v error -select_streams v:0 -show_entries stream=field_order -of default=nokey=1:noprint_wrappers=1 "$filePath" 2>/dev/null)
 
     if [ -n "$field_order" ] && [ "$field_order" != "progressive" ]; then
-        echo "Detected interlaced source (field_order=$field_order); enabling deinterlace filter."
+        echo "Detected interlaced source (field_order=$field_order); enabling deinterlace filter." >&2
         echo "$deint_filter_name"
     else
-        echo "Source is progressive or unknown field order ($field_order); no deinterlace filter."
+        echo "Source is progressive or unknown field order ($field_order); no deinterlace filter." >&2
         echo ""
     fi
 }
@@ -59,13 +59,15 @@ run_ffmpeg() {
         echo "    -f matroska '$output_file'"
         
         /usr/bin/env ffmpeg -hide_banner -loglevel info -y \
-            "$hwaccel_flags" \
+            $hwaccel_flags \
             -err_detect ignore_err -fflags +discardcorrupt \
             -i "$filePath" \
-            -vf "$deint_filter" \
-            -c:v "$encoder" -preset fast "$quality_param" \
+            -vf $deint_filter \
+            -c:v "$encoder" -preset fast $quality_param \
             -c:a copy -c:s copy \
             -f matroska "$output_file"
+
+            
     else
         echo "/usr/bin/env ffmpeg -hide_banner -loglevel info -y \\"
         echo "    $hwaccel_flags \\"
@@ -76,10 +78,10 @@ run_ffmpeg() {
         echo "    -f matroska '$output_file'"
         
         /usr/bin/env ffmpeg -hide_banner -loglevel info -y \
-            "$hwaccel_flags" \
+            $hwaccel_flags \
             -err_detect ignore_err -fflags +discardcorrupt \
             -i "$filePath" \
-            -c:v "$encoder" -preset fast "$quality_param" -pix_fmt yuv420p \
+            -c:v $encoder -preset fast $quality_param -pix_fmt yuv420p \
             -c:a copy -c:s copy \
             -f matroska "$output_file"
     fi
