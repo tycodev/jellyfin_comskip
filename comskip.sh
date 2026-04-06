@@ -126,7 +126,7 @@ while [ "$iteration" -lt "$maxRetries" ]; do
 
     # Success - clean up and exit
     echo "Re-encoding succeeded, cleaning up files"
-    rm -f "${filePath%.*}.txt" "${filePath%.*}.log"
+    rm -f "${filePath%.*}.txt" "${filePath%.*}.logo.txt" "${filePath%.*}.log"
     rm -f "$filePath"
     mv "$tmpOutputFile" "$outputFile"
     exit 0
