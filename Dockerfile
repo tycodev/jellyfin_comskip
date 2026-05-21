@@ -1,4 +1,4 @@
-FROM ghcr.io/jellyfin/jellyfin:10.11.8@sha256:93227545077893cc9516f28b3adb733b67bc4691f41b6167428a2a0e3220b81c AS build
+FROM ghcr.io/jellyfin/jellyfin:10.11.9@sha256:ef4d95143a5475d1ba4d9a6983342cac300044d676a30648b7d0e0688961712a AS build
 
 RUN apt update && apt -y upgrade && apt install -y \
     git \
@@ -19,7 +19,7 @@ RUN git clone https://github.com/erikkaashoek/Comskip.git \
     && make \
     && make install
 
-FROM ghcr.io/jellyfin/jellyfin:10.11.8@sha256:93227545077893cc9516f28b3adb733b67bc4691f41b6167428a2a0e3220b81c AS final
+FROM ghcr.io/jellyfin/jellyfin:10.11.9@sha256:ef4d95143a5475d1ba4d9a6983342cac300044d676a30648b7d0e0688961712a AS final
 ENV PATH="/usr/lib/jellyfin-ffmpeg/:$PATH"
 RUN apt update && apt install -y \
     libswscale-dev \
