@@ -104,6 +104,9 @@ while [ "$iteration" -lt "$maxRetries" ]; do
         continue
     fi
 
+    # Comskip succeeded - process the file
+    sed 's/\([0-9][0-9]*\.[0-9][0-9]*[[:space:]][0-9][0-9]*\.[0-9][0-9]*\)[[:space:]]0$/\1 1/' "${filePath%.*}".edl > "${filePath%.*}".edl.tmp && mv "${filePath%.*}".edl.tmp "${filePath%.*}".edl
+
     tmpOutputFile="${filePath%.*}.tmp"
     outputFile="${filePath%.*}.mkv"
 
