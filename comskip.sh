@@ -95,13 +95,22 @@ maxRetries=5
 echo "Comskip launched under user $(whoami) for file $filePath"
 
 while [ "$iteration" -lt "$maxRetries" ]; do
-    /usr/bin/env comskip --ini="/comskip/comskip.ini" "$filePath"
+    comskipOutput=$(/usr/bin/env comskip --ini="/comskip/comskip.ini" "$filePath" 2>&1)
     comskipReturn=$?
+
     echo "Comskip returned: $comskipReturn"
 
     if [ "$comskipReturn" -ne "0" ]; then
-        iteration=$((iteration+1))
-        continue
+        case "$comskipOutput" in
+            *"Commercials were not found"*)
+                echo "Comskip reported no commercials found; treating as success"
+                comskipReturn=0
+                ;;
+            *)
+                iteration=$((iteration+1))
+                continue
+                ;;
+        esac
     fi
 
     # Comskip succeeded - process the file
